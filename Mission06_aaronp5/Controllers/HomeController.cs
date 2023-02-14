@@ -32,6 +32,7 @@ namespace Mission06_aaronp5.Controllers
             return View();
         }
 
+        //Submitting the information from the form
         [HttpPost]
         public IActionResult MovieForm (Movie res)
         {

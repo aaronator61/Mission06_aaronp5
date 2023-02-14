@@ -16,6 +16,7 @@ namespace Mission06_aaronp5.Models
 
         public DbSet<Movie> movies { get; set; }
 
+        //Seeding in three rows for the database.
         protected override void OnModelCreating(ModelBuilder mb)
         {
             mb.Entity<Movie>().HasData(

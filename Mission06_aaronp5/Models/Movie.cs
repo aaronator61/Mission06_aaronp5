@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Mission06_aaronp5.Models
 {
+    //Movie table with each of its fields
     public class Movie
     {
         [Key]
