@@ -12,8 +12,13 @@ namespace Mission06_aaronp5.Models
         [Key]
         [Required]
         public int movieId { get; set; }
+
+
+        //Build Foreign Key Relationship
         [Required]
-        public string category { get; set; }
+        public int categoryId { get; set; }
+        public Category category { get; set; }
+
         [Required]
         public string title { get; set; }
         [Required]

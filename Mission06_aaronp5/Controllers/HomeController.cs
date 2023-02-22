@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Mission06_aaronp5.Models;
 using System;
@@ -29,15 +30,21 @@ namespace Mission06_aaronp5.Controllers
         [HttpGet]
         public IActionResult MovieForm()
         {
-            return View();
+            ViewBag.Categories = newContext.Categories.ToList();
+            return View(new Movie());
         }
 
         //Submitting the information from the form
         [HttpPost]
         public IActionResult MovieForm (Movie res)
         {
-            newContext.Add(res);//Adds info from the form
-            newContext.SaveChanges();//Saves the info to the database.
+            if (ModelState.IsValid)
+            {
+                newContext.Add(res);//Adds info from the form
+                newContext.SaveChanges();//Saves the info to the database.
+            }
+
+            ViewBag.Categories = newContext.Categories.ToList();
             return View();
         }
 
@@ -50,6 +57,57 @@ namespace Mission06_aaronp5.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpGet]
+        public IActionResult MovieTable()
+        {
+            var applications = newContext.movies.Include(x => x.category)
+                .ToList();
+
+            return View(applications);
+        }
+
+        [HttpGet]
+        public IActionResult Edit (int id)
+        {
+            ViewBag.Categories = newContext.Categories.ToList();
+
+            var application = newContext.movies.Include(x => x.category).Single(x => x.movieId == id);
+
+            return View("MovieForm", application);
+        }
+
+        [HttpPost]
+        public IActionResult Edit (Movie res)
+        {
+            if (ModelState.IsValid)
+            {
+                newContext.Update(res);//Adds info from the form
+                newContext.SaveChanges();//Saves the info to the database.
+                return RedirectToAction("MovieTable");
+            }
+            else
+            {
+                ViewBag.Categories = newContext.Categories.ToList();
+                return View(res); 
+            }
+           
+        }
+
+        public IActionResult Delete (int id)
+        {
+            var application = newContext.movies.Single(x => x.movieId == id);
+            return View(application);
+        }
+
+        [HttpPost]
+        public IActionResult Delete (Movie res)
+        {
+            newContext.movies.Remove(res);
+            newContext.SaveChanges();
+
+            return RedirectToAction("MovieTable");
         }
     }
 }

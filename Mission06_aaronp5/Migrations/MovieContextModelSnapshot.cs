@@ -15,15 +15,55 @@ namespace Mission06_aaronp5.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.32");
 
+            modelBuilder.Entity("Mission06_aaronp5.Models.Category", b =>
+                {
+                    b.Property<int>("CategoryID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CategoryName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CategoryID");
+
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryID = 1,
+                            CategoryName = "Action"
+                        },
+                        new
+                        {
+                            CategoryID = 2,
+                            CategoryName = "Comedy"
+                        },
+                        new
+                        {
+                            CategoryID = 3,
+                            CategoryName = "Horror"
+                        },
+                        new
+                        {
+                            CategoryID = 4,
+                            CategoryName = "Drama"
+                        },
+                        new
+                        {
+                            CategoryID = 5,
+                            CategoryName = "Chick Flick"
+                        });
+                });
+
             modelBuilder.Entity("Mission06_aaronp5.Models.Movie", b =>
                 {
                     b.Property<int>("movieId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("category")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("categoryId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("director")
                         .IsRequired()
@@ -49,13 +89,15 @@ namespace Mission06_aaronp5.Migrations
 
                     b.HasKey("movieId");
 
+                    b.HasIndex("categoryId");
+
                     b.ToTable("movies");
 
                     b.HasData(
                         new
                         {
                             movieId = 1,
-                            category = "Action",
+                            categoryId = 1,
                             director = "Steven Spielberg",
                             edited = true,
                             lentTo = "Jack",
@@ -66,7 +108,7 @@ namespace Mission06_aaronp5.Migrations
                         new
                         {
                             movieId = 2,
-                            category = "Comdey",
+                            categoryId = 1,
                             director = "Chris Columbus",
                             edited = true,
                             lentTo = "John",
@@ -77,7 +119,7 @@ namespace Mission06_aaronp5.Migrations
                         new
                         {
                             movieId = 3,
-                            category = "Action",
+                            categoryId = 3,
                             director = "Steven Spielberg",
                             edited = true,
                             lentTo = "James",
@@ -85,6 +127,15 @@ namespace Mission06_aaronp5.Migrations
                             rating = "PG-13",
                             title = "Jaws"
                         });
+                });
+
+            modelBuilder.Entity("Mission06_aaronp5.Models.Movie", b =>
+                {
+                    b.HasOne("Mission06_aaronp5.Models.Category", "category")
+                        .WithMany()
+                        .HasForeignKey("categoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

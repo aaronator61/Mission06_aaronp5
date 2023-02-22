@@ -10,8 +10,17 @@
 <h1>Add a Movie</h1>
 <!-- Form to add movies -->
 <form method="post">
-    <label asp-for="category">Category</label>
-    <input asp-for="category" /><br />
+
+    <div asp-validation-summary="All"></div>
+
+    <label asp-for="categoryId">Category</label>
+    <select asp-for="categoryId">
+        @foreach (Category c in ViewBag.Categories)
+        {
+            <option value="@c.CategoryID">@c.CategoryName</option>
+        }
+    </select><br />
+    <input asp-for="movieId" type="hidden" />
 
     <label asp-for="title">Movie Title:</label>
     <input asp-for="title" />    <br />
